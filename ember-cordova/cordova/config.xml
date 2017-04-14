@@ -29,6 +29,6 @@
         <allow-intent href="itms-apps:*" />
     </platform>
     <engine name="android" spec="~6.1.2" />
-    <plugin name="com.mbientlab.metawear" spec="https://github.com/mbientlab-projects/MetaWearCordova-Plugin" />
     <preference name="android-minSdkVersion" value="18" />
- </widget>
+    <plugin name="com.mbientlab.metawear" spec="https://github.com/mbientlab-projects/MetaWearCordova-Plugin" />
+</widget>
