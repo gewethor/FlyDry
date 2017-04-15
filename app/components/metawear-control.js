@@ -41,12 +41,15 @@ export default Ember.Component.extend({
 			}, 100);//run after 100ms
 		},
 		recordTempSWLF: function(){
-			//final Temperature.Sensor tempSensor = temperature.findSensors(SensorType.NRF_SOC)[0];
-			var temperatureSuccess = function(result){
+
+
+			var component = this;
+			 var temperatureSuccess = function(result){
 				console.log(result);
-				this.set('temperature').text(
-					'temperature: ' + result.temperature
-				);
+				var temperatureValues = [];
+				temperatureValues.push(result.temperature);
+				localStorage.setItem('temperature', temperatureValues);
+				component.set('temperature', result.temperature);
 			};
 
 			var failure = function(result){
@@ -60,10 +63,53 @@ export default Ember.Component.extend({
 				alert("ERROR : " + message);
 			};
 
-			metawear.mwdevice.readTemperature(temperatureSuccess, failure, {sensor: 'R_NRF_DIE'});
+      Ember.run.later(function() {
+      try {
+      metawear.mwdevice.readTemperature(temperatureSuccess, failure, {sensor: 'R_NRF_DIE'});
+      } catch (err) {
+        console.log('error: '+err);
+        alert('error: '+err);
+      }
+      }, 1000);
 		},
 		recordTempSMHF: function(){
 		},
+
+		playLED: function(){
+    					var component = this;
+    					Ember.run.later(function(){
+    						//wrapper to preserve binding satistfaction
+    						try {
+    						//invoke metawear connection
+    							console.log('Turning on Blue Light: ' + component.get('macAddressOfBoard'));
+    							metawear.mwdevice.playLED({channel:"BLUE",
+    								riseTime: 0, pulseDuration: 1000,
+    								repeatCount: 5, highTime: 500,
+    								fallTime: 750, lowIntensity: 16,
+    								highIntensity: 31});
+    						}
+    						catch(err){
+    							console.log('error: '+err);
+    							alert('error: '+err);
+    						}
+
+    					}, 100);//run after 100ms
+    				},
+    				stopLED: function(){
+    					var component = this;
+    					Ember.run.later(function(){
+    						//wrapper
+    						try {
+    						//invoke metawear connection
+    							console.log('Shutting off Blue Light: ' + component.get('macAddressOfBoard'));
+    							metawear.mwdevice.stopLED();
+    						}
+    						catch(err){
+    							console.log('error: '+err);
+    							alert('error: '+err);
+    						}
+    					}, 100);//run after 100ms
+    				}
 
 	}
 });
