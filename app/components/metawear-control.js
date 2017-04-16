@@ -41,8 +41,6 @@ export default Ember.Component.extend({
 			}, 100);//run after 100ms
 		},
 		recordTempSWLF: function(){
-
-
 			var component = this;
 			 var temperatureSuccess = function(result){
 				console.log(result);
@@ -63,7 +61,7 @@ export default Ember.Component.extend({
 				alert("ERROR : " + message);
 			};
 
-      Ember.run.later(function() {
+      Ember.run.later(function(){
       try {
       metawear.mwdevice.readTemperature(temperatureSuccess, failure, {sensor: 'R_NRF_DIE'});
       } catch (err) {
@@ -71,8 +69,7 @@ export default Ember.Component.extend({
         alert('error: '+err);
       }
       }, 1000);
-		},
-		recordTempSMHF: function(){
+
 		},
 
 		playLED: function(){
@@ -95,21 +92,22 @@ export default Ember.Component.extend({
 
     					}, 100);//run after 100ms
     				},
-    				stopLED: function(){
-    					var component = this;
-    					Ember.run.later(function(){
-    						//wrapper
-    						try {
-    						//invoke metawear connection
-    							console.log('Shutting off Blue Light: ' + component.get('macAddressOfBoard'));
-    							metawear.mwdevice.stopLED();
-    						}
-    						catch(err){
-    							console.log('error: '+err);
-    							alert('error: '+err);
-    						}
-    					}, 100);//run after 100ms
-    				}
+
+    stopLED: function(){
+      var component = this;
+      Ember.run.later(function(){
+        //wrapper
+        try {
+        //invoke metawear connection
+          console.log('Shutting off Blue Light: ' + component.get('macAddressOfBoard'));
+          metawear.mwdevice.stopLED();
+        }
+        catch(err){
+          console.log('error: '+err);
+          alert('error: '+err);
+        }
+      }, 100);//run after 100ms
+    }
 
 	}
 });
