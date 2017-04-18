@@ -3,10 +3,12 @@ import Ember from 'ember';
 export default Ember.Component.extend({
 	metawearConnected: false,
 	macAddressOfBoard: 'F3:30:D9:88:01:7E',
+	tempHistory: [],
+	tempGraph: [],
 	actions: {
-		connect: function(){
+		connect: function() {
 			var component = this;
-			Ember.run.later(function(){
+			Ember.run.later(function() {
 				try {
 					console.log('attempting to connect to: ' + component.get('macAddressOfBoard'));
 				metawear.mwdevice.connect(component.get('macAddressOfBoard'),
@@ -27,7 +29,7 @@ export default Ember.Component.extend({
 			},
 		disconnect: function(){
 			var component = this;
-			Ember.run.later(function(){
+			Ember.run.later(function() {
 				try {
 					console.log('Disconnecting from: ' + component.get('macAddressOfBoard'));
 					metawear.mwdevice.disconnect();
@@ -40,13 +42,17 @@ export default Ember.Component.extend({
 
 			}, 100);//run after 100ms
 		},
-		recordTempSWLF: function(){
+		recordTempSWLF: function() {
 			var component = this;
-			 var temperatureSuccess = function(result){
+			var temperatureValues = component.get('tempHistory');
+			var graphValues = component.get('tempGraph');
+
+			var temperatureSuccess = function(result) {
 				console.log(result);
-				var temperatureValues = [];
-				temperatureValues.push(result.temperature);
+				temperatureValues.pushObject(result.temperature);
 				localStorage.setItem('temperature', temperatureValues);
+				var newTemp = {'time': Date.now(), 'value': result.temperature, 'label': 'Temperature'};
+				graphValues.pushObject(newTemp);
 				component.set('temperature', result.temperature);
 			};
 
@@ -61,18 +67,24 @@ export default Ember.Component.extend({
 				alert("ERROR : " + message);
 			};
 
-      Ember.run.later(function(){
+      Ember.run.later(function() {
       try {
-      metawear.mwdevice.readTemperature(temperatureSuccess, failure, {sensor: 'R_NRF_DIE'});
+        console.log("Taking Temperature");
+        metawear.mwdevice.readTemperature(temperatureSuccess, failure, {sensor: 'R_NRF_DIE'});
+
       } catch (err) {
         console.log('error: '+err);
         alert('error: '+err);
       }
-      }, 1000);
+      console.log(graphValues);
+      if(temperatureValues.length < 300) {
+         component.send('recordTempSWLF');
+      }
+      }, 10000);
 
 		},
 
-		playLED: function(){
+		playLED: function() {
     					var component = this;
     					Ember.run.later(function(){
     						//wrapper to preserve binding satistfaction
@@ -93,7 +105,7 @@ export default Ember.Component.extend({
     					}, 100);//run after 100ms
     				},
 
-    stopLED: function(){
+    stopLED: function() {
       var component = this;
       Ember.run.later(function(){
         //wrapper
