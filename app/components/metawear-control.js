@@ -82,6 +82,12 @@ export default Ember.Component.extend({
       }
       }, 10000);
 
+      //var displayAlert = function(text)
+        //var component = this;
+        //this._displayAlert(text);
+
+
+
 		},
 
 		playLED: function() {

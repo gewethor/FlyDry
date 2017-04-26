@@ -1,0 +1,43 @@
+h2 {
+  text-align: center;
+  background-color: LightSkyBlue;
+  color: #808080;
+  margin: 0px;
+  padding: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+h4{
+  text-align: center;
+  padding: 10px;
+  color: #191970
+}
+
+h3{
+padding: 10px;
+color: #191970
+}
+
+html {
+  font-family: 'avantgarde', sans-serif;
+  background: LightSkyBlue;
+}
+
+div{
+  font-family: 'avantgarde', sans-serif;
+  background: LightSkyBlue;
+}
+button {
+    background-color: #808080; /* Grey */
+    font-family: 'avantgarde', sans-serif;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    position:relative;
+    width: 30%;
+    margin: 0 auto;
+    font-size: 16px;
+}
