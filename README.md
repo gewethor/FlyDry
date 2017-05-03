@@ -89,7 +89,7 @@ Mitigation:
  
 https://www.lucidchart.com/documents/embeddedchart/c46b7fdf-d022-477f-8f47-45977cb61fc0
 
-## Data Collected from in class Demo 5/2/2017
+# Data Collected from in class Demo 5/2/2017
 
 [Data from Class Demo .xlsx](https://github.com/gewethor/FlyDry/files/972400/Data.from.Class.Demo.xlsx)
 
