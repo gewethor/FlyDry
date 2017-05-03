@@ -2,9 +2,16 @@ import Ember from 'ember';
 
 export default Ember.Component.extend({
 	metawearConnected: false,
-	macAddressOfBoard: 'F3:30:D9:88:01:7E',
+	macAddressOfBoard: 'F6:D5:7D:A8:FE:44',
 	tempHistory: [],
 	tempGraph: [],
+	getTime: true,
+	stopTime: 0,
+	timer: function(){     // pulls current time when called
+    var x = new Date();
+    var inittime = x.getTime();
+    return inittime;
+	},
 	actions: {
 		connect: function() {
 			var component = this;
@@ -54,6 +61,7 @@ export default Ember.Component.extend({
 				var newTemp = {'time': Date.now(), 'value': result.temperature, 'label': 'Temperature'};
 				graphValues.pushObject(newTemp);
 				component.set('temperature', result.temperature);
+
 			};
 
 			var failure = function(result){
@@ -77,16 +85,27 @@ export default Ember.Component.extend({
         alert('error: '+err);
       }
       console.log(graphValues);
+      var check = component.get('getTime');
+      if (temperatureValues[temperatureValues.length -1] >= 32 && check) {
+        var pulledTime = parseInt(component.timer); // converts pulled value to integer from timer function
+        component.set('stopTime', pulledTime + 30000);
+        console.log(new Date().getTime());
+        console.log("initialized times");
+        component.set('getTime', false);
+       } else {
+          var stopTime = parseInt(component.get('stopTime'));
+          var currentTime = parseInt(new Date().getTime());
+          if(!check && currentTime >= stopTime) { //if temperature not 60 degrees or greater then it is false otherwise should be true
+            console.log("Your laundry is done.");
+            alert('Your laundry is done.');
+          } else {
+            console.log("Your laundry is close to being done.");
+          }
+      }
       if(temperatureValues.length < 300) {
          component.send('recordTempSWLF');
       }
       }, 10000);
-
-      //var displayAlert = function(text)
-        //var component = this;
-        //this._displayAlert(text);
-
-
 
 		},
 
